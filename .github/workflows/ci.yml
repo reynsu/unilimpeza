@@ -41,14 +41,17 @@ jobs:
 
       - name: Diagnose lockfile
         run: |
-          echo "size=$(wc -c < pnpm-lock.yaml)"
-          echo "sha256=$(sha256sum pnpm-lock.yaml | awk '{print $1}')"
-          echo "line-numbers-with-triple-dash:"
-          grep -n -- '---' pnpm-lock.yaml | head -10 || true
-          echo "git-ls-tree-HEAD:"
+          echo "=== first 30 lines ==="
+          head -n 30 pnpm-lock.yaml
+          echo "=== around line 94 ==="
+          sed -n '90,100p' pnpm-lock.yaml
+          echo "=== git blob info ==="
           git ls-tree HEAD -- pnpm-lock.yaml
-          echo "git-hash-object:"
           git hash-object pnpm-lock.yaml
+          echo "=== restore from blob + re-check ==="
+          BLOB=$(git ls-tree HEAD -- pnpm-lock.yaml | awk '{print $3}')
+          git cat-file -p "$BLOB" > /tmp/blob.yaml
+          sha256sum /tmp/blob.yaml pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
