@@ -20,3 +20,10 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    ignore:
+      # v5+ rewrites pnpm-lock.yaml to prepend pnpm metadata in a multi-doc
+      # YAML format, which `pnpm install --frozen-lockfile` then rejects with
+      # ERR_PNPM_BROKEN_LOCKFILE. Keep on v4 until the action stops mutating
+      # our lockfile.
+      - dependency-name: pnpm/action-setup
+        update-types: [version-update:semver-major]
