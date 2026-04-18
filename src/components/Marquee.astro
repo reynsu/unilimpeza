@@ -1,0 +1,14 @@
+---
+import { MARQUEE_ITEMS } from '../lib/content';
+const tripled = [...MARQUEE_ITEMS, ...MARQUEE_ITEMS, ...MARQUEE_ITEMS];
+---
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    {
+      tripled.map((t, i) => (
+        <span class={i % 3 === 0 ? 'dot' : ''}>{(i % 3 === 0 ? '✦ ' : '') + t}</span>
+      ))
+    }
+  </div>
+</div>

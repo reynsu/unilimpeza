@@ -1,0 +1,222 @@
+---
+import '../styles/global.css';
+import { HERO_SLIDES } from '../lib/content';
+import { escapeJsonForScript } from '../lib/sanitize';
+import { HERO_MOBILE_MEDIA, HERO_DESKTOP_MEDIA } from '../lib/breakpoints';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Unilimpeza — Eficiência em movimento | Limpeza de cozinhas no Algarve',
+  description = 'Limpeza profissional de cozinhas comerciais no Algarve desde 2019. Desengorduramento, exaustores, filtros, câmaras frigoríficas e manutenção preventiva. Certificação HACCP.',
+} = Astro.props;
+
+// Single source of truth — `site:` in astro.config.mjs.
+const siteUrl = (Astro.site?.href ?? 'https://unilimpeza.pt/').replace(/\/$/, '');
+const canonical = new URL(Astro.url.pathname, `${siteUrl}/`).href;
+const firstSlide = HERO_SLIDES[0];
+const ogImage = `${siteUrl}${firstSlide.photoBase}.jpg`;
+
+const localBusinessLd = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  '@id': `${siteUrl}/#organization`,
+  name: 'Unilimpeza',
+  alternateName: 'Unilimpeza Lda.',
+  description,
+  url: siteUrl,
+  telephone: '+351289000000',
+  email: 'ola@unilimpeza.pt',
+  image: ogImage,
+  logo: `${siteUrl}/logo.svg`,
+  priceRange: '€€',
+  foundingDate: '2019',
+  areaServed: {
+    '@type': 'AdministrativeArea',
+    name: 'Algarve, Portugal',
+  },
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Rua do Aeroporto, 27',
+    addressLocality: 'Faro',
+    postalCode: '8000-000',
+    addressRegion: 'Algarve',
+    addressCountry: 'PT',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 37.0194,
+    longitude: -7.9322,
+  },
+  openingHoursSpecification: [
+    {
+      '@type': 'OpeningHoursSpecification',
+      dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      opens: '06:00',
+      closes: '23:00',
+    },
+  ],
+  sameAs: [
+    'https://www.instagram.com/unilimpeza',
+    'https://www.linkedin.com/company/unilimpeza',
+  ],
+  hasOfferCatalog: {
+    '@type': 'OfferCatalog',
+    name: 'Serviços de limpeza de cozinhas comerciais',
+    itemListElement: [
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Limpeza profunda de cozinha' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Exaustores industriais — desmontagem e lavagem química' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Filtros de gordura — rotação e substituição' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Câmaras frigoríficas — higienização profunda' } },
+      { '@type': 'Offer', itemOffered: { '@type': 'Service', name: 'Manutenção preventiva — contratos mensais' } },
+    ],
+  },
+};
+---
+
+<!doctype html>
+<html lang="pt" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta http-equiv="x-ua-compatible" content="IE=edge" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f5f1e8" media="(prefers-color-scheme: light)" />
+    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />
+    <meta name="author" content="Unilimpeza Lda." />
+    <meta name="geo.region" content="PT-08" />
+    <meta name="geo.placename" content="Faro, Algarve" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Unilimpeza" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:alt" content="Cozinha profissional limpa pela equipa Unilimpeza no Algarve" />
+    <meta property="og:locale" content="pt_PT" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="Cozinha profissional limpa pela equipa Unilimpeza no Algarve" />
+
+    <!-- Icons + manifest -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="Unilimpeza" />
+    <meta name="application-name" content="Unilimpeza" />
+
+    <!-- LCP preload: preload the AVIF (what modern browsers will use) with type hint
+         so they only fetch if they support it. JPG fallback is still referenced by <img>. -->
+    <link
+      rel="preload"
+      as="image"
+      href={`${firstSlide.photoBase}.avif`}
+      type="image/avif"
+      media={HERO_DESKTOP_MEDIA}
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href={`${firstSlide.photoBase}-sm.avif`}
+      type="image/avif"
+      media={HERO_MOBILE_MEDIA}
+      fetchpriority="high"
+    />
+
+    {/* Font loading — non-blocking: preload the stylesheet, then flip rel→stylesheet
+         on load. Falls back to a regular <link> via <noscript>. */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      id="unilimpeza-fonts"
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter+Tight:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400;1,6..96,700&family=Archivo+Black&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap"
+    />
+    <script is:inline>
+      (function () {
+        var l = document.getElementById('unilimpeza-fonts');
+        if (l) {
+          l.addEventListener('load', function () { l.rel = 'stylesheet'; }, { once: true });
+          // Safety: if load fires before this handler attaches (cached), flip immediately.
+          if (l.sheet) l.rel = 'stylesheet';
+        }
+      })();
+    </script>
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter+Tight:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400;1,6..96,700&family=Archivo+Black&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap"
+      />
+    </noscript>
+
+    <!-- Structured data — escape `</script>` / `<!--` sequences defensively -->
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={escapeJsonForScript(JSON.stringify(localBusinessLd))}
+    />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Saltar para o conteúdo</a>
+    <div class="grain" aria-hidden="true"></div>
+
+    <slot />
+
+    <script is:inline>
+      // Smooth-scroll for internal anchor links (respects prefers-reduced-motion via CSS)
+      const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.querySelectorAll('a[href^="#"]').forEach((a) => {
+        a.addEventListener('click', (e) => {
+          const id = a.getAttribute('href');
+          if (!id || id === '#') return;
+          const t = document.querySelector(id);
+          if (t) {
+            e.preventDefault();
+            window.scrollTo({
+              top: t.getBoundingClientRect().top + window.scrollY,
+              behavior: prefersReduce ? 'auto' : 'smooth',
+            });
+            // Move focus to the target for screen readers
+            const prev = t.getAttribute('tabindex');
+            t.setAttribute('tabindex', '-1');
+            t.focus({ preventScroll: true });
+            if (prev === null) {
+              t.addEventListener('blur', () => t.removeAttribute('tabindex'), { once: true });
+            }
+          }
+        });
+      });
+
+      // Reveal-on-scroll observer (one shared observer)
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              io.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -5% 0px' }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

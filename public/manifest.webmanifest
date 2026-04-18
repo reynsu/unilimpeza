@@ -1,0 +1,25 @@
+{
+  "name": "Unilimpeza — Eficiência em movimento",
+  "short_name": "Unilimpeza",
+  "description": "Limpeza profissional de cozinhas comerciais no Algarve.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f1e8",
+  "theme_color": "#0b0f14",
+  "lang": "pt-PT",
+  "categories": ["business", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

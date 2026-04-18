@@ -1,0 +1,103 @@
+---
+export const prerender = true;
+
+import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav';
+import HeroCarousel from '../components/HeroCarousel';
+import Marquee from '../components/Marquee.astro';
+import Services from '../components/Services.astro';
+import Process from '../components/Process.astro';
+import ClientsMarquee from '../components/ClientsMarquee.astro';
+import Contact from '../components/Contact';
+import FaqAccordion from '../components/FaqAccordion';
+import Footer from '../components/Footer.astro';
+import TweaksPanel from '../components/TweaksPanel';
+---
+
+<Base>
+  <Nav client:load />
+
+  <main id="main" tabindex="-1">
+    <HeroCarousel client:load />
+
+    <Marquee />
+
+    <Services />
+
+    <Process />
+
+    <ClientsMarquee />
+
+    <section id="contact" aria-labelledby="contact-heading">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="sec-num">03 / 03</div>
+        <div>
+          <div class="sec-kicker" data-pt="Vamos conversar" data-en="Let's talk">
+            Vamos conversar
+          </div>
+          <h2
+            id="contact-heading"
+            class="sec-title"
+            data-pt='Peça um <em>orçamento</em> sem compromisso.'
+            data-en='Get a <em>free</em> quote.'
+          >
+            Peça um <em>orçamento</em> sem compromisso.
+          </h2>
+        </div>
+        <p
+          class="sec-desc"
+          data-pt="Visita, avaliação e proposta em 48h. Sem letras pequenas."
+          data-en="Visit, assessment and quote within 48h."
+        >
+          Visita, avaliação e proposta em 48h. Sem letras pequenas.
+        </p>
+      </div>
+
+      <div class="contact-grid">
+        <Contact client:visible />
+
+        <div class="contact-info">
+          <div
+            class="big"
+            data-pt='Olá.<br/><em>Atendemos.</em>'
+            data-en='Hi.<br/><em>We answer.</em>'
+          >
+            Olá.<br /><em>Atendemos.</em>
+          </div>
+          <div class="block">
+            <div class="block-kicker">Tel.</div>
+            <a href="tel:+351289000000">+351 289 000 000</a>
+          </div>
+          <div class="block">
+            <div class="block-kicker">Email</div>
+            <a href="mailto:ola@unilimpeza.pt">ola@unilimpeza.pt</a>
+          </div>
+          <div class="block">
+            <div class="block-kicker" data-pt="Sede" data-en="HQ">Sede</div>
+            Rua do Aeroporto, 27<br />8000-000 Faro, Algarve<br />Portugal
+          </div>
+          <div class="block">
+            <div class="block-kicker" data-pt="Horário" data-en="Hours">Horário</div>
+            <span data-pt="Seg–Sáb 06:00–23:00" data-en="Mon–Sat 06:00–23:00">
+              Seg–Sáb 06:00–23:00
+            </span><br />
+            <span data-pt="Domingo sob marcação" data-en="Sundays by appointment">
+              Domingo sob marcação
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:120px;" aria-labelledby="faq-heading">
+        <h2 id="faq-heading" class="sec-kicker reveal" style="margin-bottom:24px;">FAQ</h2>
+        <FaqAccordion client:visible />
+      </div>
+    </div>
+  </section>
+  </main>
+
+  <Footer />
+
+  <TweaksPanel client:only="preact" />
+</Base>

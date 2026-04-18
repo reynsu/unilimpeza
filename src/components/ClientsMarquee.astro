@@ -1,0 +1,17 @@
+---
+import { CLIENTS } from '../lib/content';
+const doubled = [...CLIENTS, ...CLIENTS];
+---
+
+<div class="clients" aria-label="Clientes" role="region">
+  <div class="clients-track" aria-hidden="true">
+    {
+      doubled.map((c) => (
+        <div class="client">
+          <span class="star">✦</span>
+          {c}
+        </div>
+      ))
+    }
+  </div>
+</div>

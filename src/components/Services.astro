@@ -1,0 +1,34 @@
+---
+import { SERVICES } from '../lib/content';
+import ServiceCard from './ServiceCard';
+---
+
+<section id="services" aria-labelledby="services-heading">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num" aria-hidden="true">01 / 03</div>
+      <div>
+        <div class="sec-kicker" data-pt="O que fazemos" data-en="What we do">O que fazemos</div>
+        <h2
+          id="services-heading"
+          class="sec-title"
+          data-pt='Serviços <em>afinados</em> com o ritmo da sua cozinha.'
+          data-en='Services <em>tuned</em> to the rhythm of your kitchen.'
+        >
+          Serviços <em>afinados</em> com o ritmo da sua cozinha.
+        </h2>
+      </div>
+      <p
+        class="sec-desc"
+        data-pt="Cada cozinha é diferente. Cada contrato começa com um diagnóstico em sítio, no Algarve."
+        data-en="Every kitchen is different. Every contract begins with an on-site diagnostic."
+      >
+        Cada cozinha é diferente. Cada contrato começa com um diagnóstico em sítio, no Algarve.
+      </p>
+    </div>
+
+    <div class="services-grid">
+      {SERVICES.map((s, i) => <ServiceCard client:idle i={i} data={s} />)}
+    </div>
+  </div>
+</section>

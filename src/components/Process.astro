@@ -1,0 +1,49 @@
+---
+import { PROCESS } from '../lib/content';
+---
+
+<section id="process" aria-labelledby="process-heading">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <div class="sec-num" aria-hidden="true">02 / 03</div>
+      <div>
+        <div class="sec-kicker" data-pt="Como trabalhamos" data-en="How we work">
+          Como trabalhamos
+        </div>
+        <h2
+          id="process-heading"
+          class="sec-title"
+          data-pt='Quatro passos. <em>Zero</em> surpresas.'
+          data-en='Four steps. <em>Zero</em> surprises.'
+        >
+          Quatro passos. <em>Zero</em> surpresas.
+        </h2>
+      </div>
+      <p
+        class="sec-desc"
+        data-pt="Trabalhamos fora do horário da cozinha. Entramos, limpamos, documentamos."
+        data-en="We work outside kitchen hours."
+      >
+        Trabalhamos fora do horário da cozinha. Entramos, limpamos, documentamos.
+      </p>
+    </div>
+
+    <ol class="process-strip">
+      {
+        PROCESS.map((p, i) => (
+          <li class="step reveal">
+            <div class="step-marker" aria-hidden="true">
+              0{i + 1}
+            </div>
+            <h3 class="step-title" data-pt={p.pt[0]} data-en={p.en[0]}>
+              {p.pt[0]}
+            </h3>
+            <p class="step-desc" data-pt={p.pt[1]} data-en={p.en[1]}>
+              {p.pt[1]}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
