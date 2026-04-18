@@ -43,12 +43,12 @@ jobs:
         run: |
           echo "size=$(wc -c < pnpm-lock.yaml)"
           echo "sha256=$(sha256sum pnpm-lock.yaml | awk '{print $1}')"
-          echo "first-3-lines:"
-          head -n 3 pnpm-lock.yaml
-          echo "---"
-          echo "triple-dash-count=$(grep -c -- '---' pnpm-lock.yaml || echo 0)"
-          echo "doc-start-marker-count=$(grep -cE '^---( |$)' pnpm-lock.yaml || echo 0)"
-          echo "doc-end-marker-count=$(grep -cE '^\.\.\.( |$)' pnpm-lock.yaml || echo 0)"
+          echo "line-numbers-with-triple-dash:"
+          grep -n -- '---' pnpm-lock.yaml | head -10 || true
+          echo "git-ls-tree-HEAD:"
+          git ls-tree HEAD -- pnpm-lock.yaml
+          echo "git-hash-object:"
+          git hash-object pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
