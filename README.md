@@ -66,6 +66,79 @@ location ~ \.(webmanifest|xml|svg|png|jpg|avif|webp|woff2)$ {
 
 Or on Vercel/Netlify/Cloudflare Pages, use their `headers` config file. On Fly.io/Render/Railway, use a sidecar Caddy/nginx container.
 
+## Deploy
+
+The default build uses `@astrojs/node` (standalone). Pick the host that fits:
+
+### Fly.io / Render / Railway (Node SSR, recommended)
+
+The standalone server at `dist/server/entry.mjs` is a plain Node HTTP server — set your platform start command to:
+
+```bash
+node ./dist/server/entry.mjs
+```
+
+and expose port `4321` (or set `HOST=0.0.0.0 PORT=$PORT` in env). No adapter swap needed.
+
+### Vercel
+
+Swap the adapter:
+
+```bash
+pnpm remove @astrojs/node
+pnpm add @astrojs/vercel
+```
+
+Update `astro.config.mjs`:
+
+```ts
+import vercel from '@astrojs/vercel/serverless';
+adapter: vercel()
+```
+
+Then import the GitHub repo at <https://vercel.com/new> — it auto-detects Astro.
+
+### Netlify
+
+```bash
+pnpm remove @astrojs/node
+pnpm add @astrojs/netlify
+```
+
+```ts
+import netlify from '@astrojs/netlify';
+adapter: netlify()
+```
+
+Link via <https://app.netlify.com/start> or `netlify deploy`.
+
+### Cloudflare Pages
+
+```bash
+pnpm remove @astrojs/node
+pnpm add @astrojs/cloudflare
+```
+
+```ts
+import cloudflare from '@astrojs/cloudflare';
+adapter: cloudflare()
+```
+
+### Static (GitHub Pages, any CDN)
+
+`/` is already prerendered. If you can do without `/api/contact`, swap to static output:
+
+```ts
+// astro.config.mjs
+output: 'static',      // remove output: 'server' and adapter
+```
+
+Then `pnpm build` writes a fully static `dist/` that any static host serves.
+
+## CI
+
+`.github/workflows/ci.yml` runs `astro check` + `pnpm build` on every push and PR to `main`, uploads the `dist/` artifact for 7 days, and exits red on any type or build error.
+
 ## Bilingual (PT/EN)
 
 Portuguese is default (`<html lang="pt">`). Server-rendered `.astro` components include `data-pt` / `data-en` attributes on every translatable element. When the user toggles language via the nav, a Preact signal broadcasts the change, which:
