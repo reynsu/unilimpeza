@@ -20,7 +20,7 @@ jobs:
       # v6 mangles large YAML files (injects `---` markers, invalidates pnpm-lock.yaml).
       # See: blob sha256=7a0aa8a… clean; checked-out tree sha256=9a38d84… with 2 extra
       # doc-start markers. v4 is stable.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # pnpm/action-setup@v6 injects a pnpm-metadata YAML document BEFORE the
       # real lockfile content (multi-doc with `---` separator), which pnpm 10's
