@@ -19,13 +19,21 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      # Reads `packageManager` from package.json — keeps CI + local in sync
+      # Explicit version pin (belt & braces — also matches packageManager in package.json)
       - uses: pnpm/action-setup@v6
+        with:
+          version: 10.12.1
 
       - uses: actions/setup-node@v6
         with:
           node-version: '20'
           cache: 'pnpm'
+
+      - name: Report toolchain versions
+        run: |
+          echo "node=$(node --version)"
+          echo "pnpm=$(pnpm --version)"
+          grep packageManager package.json
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
