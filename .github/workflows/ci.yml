@@ -22,8 +22,11 @@ jobs:
       # doc-start markers. v4 is stable.
       - uses: actions/checkout@v4
 
-      # Reads version from `packageManager` in package.json
-      - uses: pnpm/action-setup@v6
+      # pnpm/action-setup@v6 injects a pnpm-metadata YAML document BEFORE the
+      # real lockfile content (multi-doc with `---` separator), which pnpm 10's
+      # `install --frozen-lockfile` rejects with ERR_PNPM_BROKEN_LOCKFILE.
+      # v4 doesn't do this and reads `packageManager` from package.json cleanly.
+      - uses: pnpm/action-setup@v4
 
       # v6 has a pnpm lockfile-hashing step that errors on v9.0 lockfiles
       # ("ERR_PNPM_BROKEN_LOCKFILE: expected a single document, found more").
@@ -38,20 +41,6 @@ jobs:
           echo "node=$(node --version)"
           echo "pnpm=$(pnpm --version)"
           grep packageManager package.json
-
-      - name: Diagnose lockfile
-        run: |
-          echo "=== first 30 lines ==="
-          head -n 30 pnpm-lock.yaml
-          echo "=== around line 94 ==="
-          sed -n '90,100p' pnpm-lock.yaml
-          echo "=== git blob info ==="
-          git ls-tree HEAD -- pnpm-lock.yaml
-          git hash-object pnpm-lock.yaml
-          echo "=== restore from blob + re-check ==="
-          BLOB=$(git ls-tree HEAD -- pnpm-lock.yaml | awk '{print $3}')
-          git cat-file -p "$BLOB" > /tmp/blob.yaml
-          sha256sum /tmp/blob.yaml pnpm-lock.yaml
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
