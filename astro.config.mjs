@@ -1,12 +1,12 @@
 import { defineConfig } from 'astro/config';
 import preact from '@astrojs/preact';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel/serverless';
 import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://unilimpeza.pt',
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel(),
   integrations: [preact(), sitemap()],
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   compressHTML: true,

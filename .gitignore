@@ -34,3 +34,6 @@ design/
 design.tar.gz
 index.html
 *.local
+
+# Vercel
+.vercel/
