@@ -17,7 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v6
+      # v6 mangles large YAML files (injects `---` markers, invalidates pnpm-lock.yaml).
+      # See: blob sha256=7a0aa8a… clean; checked-out tree sha256=9a38d84… with 2 extra
+      # doc-start markers. v4 is stable.
+      - uses: actions/checkout@v4
 
       # Reads version from `packageManager` in package.json
       - uses: pnpm/action-setup@v6
@@ -57,7 +60,7 @@ jobs:
         run: pnpm build
 
       - name: Upload build artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
