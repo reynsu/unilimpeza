@@ -78,15 +78,10 @@ export default function FaqAccordion() {
               </span>
               <span class="faq-toggle" aria-hidden="true">+</span>
             </button>
-            <div
-              id={aId}
-              class="faq-a"
-              role="region"
-              aria-labelledby={qId}
-              data-pt={f.pt[1]}
-              data-en={f.en[1]}
-            >
-              {f.pt[1]}
+            <div id={aId} class="faq-a" role="region" aria-labelledby={qId}>
+              <div class="faq-a-inner" data-pt={f.pt[1]} data-en={f.en[1]}>
+                {f.pt[1]}
+              </div>
             </div>
           </div>
         );
