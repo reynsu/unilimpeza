@@ -41,13 +41,19 @@ export default function HeroPhoto({ slide, lang, eager, isActive }: HeroPhotoPro
         <source type="image/avif" srcset={`${base}.avif`} />
         <source type="image/webp" media={HERO_MOBILE_MEDIA} srcset={`${base}-sm.webp`} />
         <source type="image/webp" srcset={`${base}.webp`} />
+        {/*
+          - Slide 1 (eager): high priority, sync decode, eager load — optimizes LCP.
+          - Slides 2-5: lazy load with auto priority so the browser fetches them
+            during idle time after LCP; async decode keeps them off the main thread
+            when clip-path transitions reveal them.
+        */}
         <img
           src={`${base}.jpg`}
           alt={alt}
           width={slide.width}
           height={slide.height}
           loading={eager ? 'eager' : 'lazy'}
-          fetchpriority={eager ? 'high' : 'low'}
+          fetchpriority={eager ? 'high' : 'auto'}
           decoding={eager ? 'sync' : 'async'}
           aria-hidden={!isActive}
         />

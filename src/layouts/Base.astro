@@ -1,6 +1,6 @@
 ---
 import '../styles/global.css';
-import { HERO_SLIDES } from '../lib/content';
+import { HERO_SLIDES, FAQ } from '../lib/content';
 import { escapeJsonForScript } from '../lib/sanitize';
 import { HERO_MOBILE_MEDIA, HERO_DESKTOP_MEDIA } from '../lib/breakpoints';
 
@@ -10,8 +10,8 @@ interface Props {
 }
 
 const {
-  title = 'Unilimpeza — Eficiência em movimento | Limpeza de cozinhas no Algarve',
-  description = 'Limpeza profissional de cozinhas comerciais no Algarve desde 2019. Desengorduramento, exaustores, filtros, câmaras frigoríficas e manutenção preventiva. Certificação HACCP.',
+  title = 'Unilimpeza — Limpeza profissional de cozinhas no Algarve | HACCP & EN 16282',
+  description = 'Limpeza profissional de cozinhas comerciais no Algarve desde 2019. Desengorduramento, exaustores, filtros, câmaras frigoríficas e manutenção preventiva. Certificação HACCP, norma EN 16282. Faro, Albufeira, Lagos, Portimão, Tavira.',
 } = Astro.props;
 
 // Single source of truth — `site:` in astro.config.mjs.
@@ -20,10 +20,19 @@ const canonical = new URL(Astro.url.pathname, `${siteUrl}/`).href;
 const firstSlide = HERO_SLIDES[0];
 const ogImage = `${siteUrl}${firstSlide.photoBase}.jpg`;
 
+// -----------------------------------------------------------------------------
+// Structured data — helps search engines render rich results.
+// 1. LocalBusiness: who we are, where, hours, services.
+// 2. FAQPage: the FAQ section becomes a rich result.
+// 3. WebSite: enables sitelinks search box.
+// 4. BreadcrumbList: single-page site, just Home.
+// -----------------------------------------------------------------------------
+const orgId = `${siteUrl}/#organization`;
+
 const localBusinessLd = {
   '@context': 'https://schema.org',
   '@type': 'LocalBusiness',
-  '@id': `${siteUrl}/#organization`,
+  '@id': orgId,
   name: 'Unilimpeza',
   alternateName: 'Unilimpeza Lda.',
   description,
@@ -34,10 +43,14 @@ const localBusinessLd = {
   logo: `${siteUrl}/logo.svg`,
   priceRange: '€€',
   foundingDate: '2019',
-  areaServed: {
-    '@type': 'AdministrativeArea',
-    name: 'Algarve, Portugal',
-  },
+  areaServed: [
+    { '@type': 'AdministrativeArea', name: 'Algarve, Portugal' },
+    { '@type': 'City', name: 'Faro' },
+    { '@type': 'City', name: 'Albufeira' },
+    { '@type': 'City', name: 'Lagos' },
+    { '@type': 'City', name: 'Portimão' },
+    { '@type': 'City', name: 'Tavira' },
+  ],
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Rua do Aeroporto, 27',
@@ -75,53 +88,122 @@ const localBusinessLd = {
     ],
   },
 };
+
+const faqPageLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map((f) => ({
+    '@type': 'Question',
+    name: f.pt[0],
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: f.pt[1],
+    },
+  })),
+};
+
+const webSiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${siteUrl}/#website`,
+  url: siteUrl,
+  name: 'Unilimpeza',
+  publisher: { '@id': orgId },
+  inLanguage: ['pt-PT', 'en'],
+};
+
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Início',
+      item: `${siteUrl}/`,
+    },
+  ],
+};
 ---
 
 <!doctype html>
-<html lang="pt" data-theme="light">
+<html lang="pt-PT" data-theme="light">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
     <meta http-equiv="x-ua-compatible" content="IE=edge" />
 
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+
+    {/* Language alternates — same URL serves both; signal for i18n SEO. */}
+    <link rel="alternate" hreflang="pt-PT" href={canonical} />
+    <link rel="alternate" hreflang="en" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+
     <meta name="theme-color" content="#0b0f14" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#f5f1e8" media="(prefers-color-scheme: light)" />
-    <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta
+      name="robots"
+      content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    />
+    <meta name="googlebot" content="index,follow" />
+    <meta name="bingbot" content="index,follow" />
     <meta name="author" content="Unilimpeza Lda." />
+    <meta name="publisher" content="Unilimpeza Lda." />
     <meta name="geo.region" content="PT-08" />
     <meta name="geo.placename" content="Faro, Algarve" />
+    <meta name="geo.position" content="37.0194;-7.9322" />
+    <meta name="ICBM" content="37.0194, -7.9322" />
+    <meta
+      name="keywords"
+      content="limpeza de cozinhas, limpeza industrial, desengorduramento, exaustores, filtros de gordura, HACCP, Algarve, Faro, Albufeira, Lagos, EN 16282, manutenção preventiva"
+    />
+    <meta name="format-detection" content="telephone=yes" />
 
-    <!-- Open Graph -->
+    {/* Open Graph */}
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Unilimpeza" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
-    <meta property="og:image:alt" content="Cozinha profissional limpa pela equipa Unilimpeza no Algarve" />
+    <meta property="og:image:width" content={String(firstSlide.width)} />
+    <meta property="og:image:height" content={String(firstSlide.height)} />
+    <meta
+      property="og:image:alt"
+      content="Cozinha profissional limpa pela equipa Unilimpeza no Algarve"
+    />
     <meta property="og:locale" content="pt_PT" />
     <meta property="og:locale:alternate" content="en_US" />
 
-    <!-- Twitter -->
+    {/* Twitter */}
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content="Cozinha profissional limpa pela equipa Unilimpeza no Algarve" />
+    <meta
+      name="twitter:image:alt"
+      content="Cozinha profissional limpa pela equipa Unilimpeza no Algarve"
+    />
 
-    <!-- Icons + manifest -->
+    {/* Icons + manifest */}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" href="/favicon-32.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <meta name="apple-mobile-web-app-title" content="Unilimpeza" />
     <meta name="application-name" content="Unilimpeza" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
-    <!-- LCP preload: preload the AVIF (what modern browsers will use) with type hint
-         so they only fetch if they support it. JPG fallback is still referenced by <img>. -->
+    {/*
+      LCP preload: preload the AVIF (what modern browsers will use) with type hint
+      so they only fetch if they support it. JPG fallback is still referenced by <img>.
+    */}
     <link
       rel="preload"
       as="image"
@@ -139,22 +221,28 @@ const localBusinessLd = {
       fetchpriority="high"
     />
 
-    {/* Font loading — non-blocking: preload the stylesheet, then flip rel→stylesheet
-         on load. Falls back to a regular <link> via <noscript>. */}
+    {/*
+      Font loading — non-blocking preload, then flip rel→stylesheet on load.
+      Families: Fraunces (display, now also used on slide-01), Inter Tight,
+      JetBrains Mono, Archivo Black, Cormorant Garamond, Instrument Serif.
+      Added Fraunces italic 400 (was only 300). Dropped Bodoni Moda entirely —
+      its hairlines were illegible over the hero photo; Fraunces italic fills
+      that role with far better on-screen readability and brand coherence.
+    */}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
     <link
       id="unilimpeza-fonts"
       rel="preload"
       as="style"
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter+Tight:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400;1,6..96,700&family=Archivo+Black&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Archivo+Black&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap"
     />
     <script is:inline>
       (function () {
         var l = document.getElementById('unilimpeza-fonts');
         if (l) {
           l.addEventListener('load', function () { l.rel = 'stylesheet'; }, { once: true });
-          // Safety: if load fires before this handler attaches (cached), flip immediately.
           if (l.sheet) l.rel = 'stylesheet';
         }
       })();
@@ -162,15 +250,30 @@ const localBusinessLd = {
     <noscript>
       <link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&family=Inter+Tight:wght@300;400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400;1,6..96,700&family=Archivo+Black&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Archivo+Black&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Instrument+Serif:ital@0;1&display=swap"
       />
     </noscript>
 
-    <!-- Structured data — escape `</script>` / `<!--` sequences defensively -->
+    {/* Structured data — escape `</script>` / `<!--` sequences defensively */}
     <script
       is:inline
       type="application/ld+json"
       set:html={escapeJsonForScript(JSON.stringify(localBusinessLd))}
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={escapeJsonForScript(JSON.stringify(webSiteLd))}
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={escapeJsonForScript(JSON.stringify(faqPageLd))}
+    />
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={escapeJsonForScript(JSON.stringify(breadcrumbLd))}
     />
   </head>
   <body>
@@ -181,42 +284,43 @@ const localBusinessLd = {
 
     <script is:inline>
       // Smooth-scroll for internal anchor links (respects prefers-reduced-motion via CSS)
-      const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      document.querySelectorAll('a[href^="#"]').forEach((a) => {
-        a.addEventListener('click', (e) => {
-          const id = a.getAttribute('href');
-          if (!id || id === '#') return;
-          const t = document.querySelector(id);
-          if (t) {
-            e.preventDefault();
-            window.scrollTo({
-              top: t.getBoundingClientRect().top + window.scrollY,
-              behavior: prefersReduce ? 'auto' : 'smooth',
-            });
-            // Move focus to the target for screen readers
-            const prev = t.getAttribute('tabindex');
-            t.setAttribute('tabindex', '-1');
-            t.focus({ preventScroll: true });
-            if (prev === null) {
-              t.addEventListener('blur', () => t.removeAttribute('tabindex'), { once: true });
-            }
-          }
-        });
-      });
-
-      // Reveal-on-scroll observer (one shared observer)
-      const io = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('in');
-              io.unobserve(entry.target);
+      (function () {
+        var prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+          a.addEventListener('click', function (e) {
+            var id = a.getAttribute('href');
+            if (!id || id === '#') return;
+            var t = document.querySelector(id);
+            if (t) {
+              e.preventDefault();
+              window.scrollTo({
+                top: t.getBoundingClientRect().top + window.scrollY,
+                behavior: prefersReduce ? 'auto' : 'smooth',
+              });
+              var prev = t.getAttribute('tabindex');
+              t.setAttribute('tabindex', '-1');
+              t.focus({ preventScroll: true });
+              if (prev === null) {
+                t.addEventListener('blur', function () { t.removeAttribute('tabindex'); }, { once: true });
+              }
             }
           });
-        },
-        { threshold: 0.12, rootMargin: '0px 0px -5% 0px' }
-      );
-      document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+        });
+
+        // Reveal-on-scroll observer (one shared observer)
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('in');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.12, rootMargin: '0px 0px -5% 0px' }
+        );
+        document.querySelectorAll('.reveal').forEach(function (el) { io.observe(el); });
+      })();
     </script>
   </body>
 </html>

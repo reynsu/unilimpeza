@@ -6,8 +6,19 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://unilimpeza.pt',
   output: 'server',
-  adapter: vercel(),
-  integrations: [preact(), sitemap()],
+  adapter: vercel({
+    // Serve images through Vercel's built-in CDN transformer.
+    imageService: true,
+  }),
+  integrations: [
+    preact({ compat: false }),
+    sitemap({
+      changefreq: 'monthly',
+      priority: 0.8,
+      lastmod: new Date(),
+    }),
+  ],
+  // Hover-only prefetch: keeps initial payload tight but makes nav feel instant.
   prefetch: { prefetchAll: false, defaultStrategy: 'hover' },
   compressHTML: true,
   image: {
@@ -28,9 +39,15 @@ export default defineConfig({
       target: 'es2022',
       cssMinify: 'lightningcss',
       cssCodeSplit: true,
+      reportCompressedSize: false,
     },
     resolve: {
       dedupe: ['preact', 'preact/hooks', 'preact/jsx-runtime'],
+    },
+    // Strip legal comments in production for smaller bundles.
+    esbuild: {
+      legalComments: 'none',
+      treeShaking: true,
     },
   },
 });

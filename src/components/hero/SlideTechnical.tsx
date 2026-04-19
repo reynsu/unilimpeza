@@ -16,13 +16,13 @@ const SlideTechnical: ComponentType<Props> = ({ lang: l, TitleTag }) => {
       </div>
       <TitleTag class="s-title">
         <span class="hline">
-          <span>{pt ? 'Precisão' : 'Precision'}</span>
+          <span>{pt ? 'Precisão ' : 'Precision '}</span>
         </span>
         <span class="hline">
           <span>
             {pt ? 'em ' : 'in '}
             <u>{pt ? 'aço inox' : 'stainless'}</u>
-            {pt ? ',' : ','}
+            {pt ? ', ' : ', '}
           </span>
         </span>
         <span class="hline">

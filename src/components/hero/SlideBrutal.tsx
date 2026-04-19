@@ -14,11 +14,11 @@ const SlideBrutal: ComponentType<Props> = ({ lang: l, TitleTag }) => {
       <div class="s-center">
         <TitleTag class="s-title">
           <span class="hline">
-            <span>{pt ? 'Queimamos' : 'We burn'}</span>
+            <span>{pt ? 'Queimamos ' : 'We burn '}</span>
           </span>
           <span class="hline">
             <span>
-              <em>{pt ? 'a gordura' : 'the grease'}</em>
+              <em>{pt ? 'a gordura ' : 'the grease '}</em>
             </span>
           </span>
           <span class="hline">

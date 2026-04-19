@@ -15,7 +15,9 @@ import TweaksPanel from '../components/TweaksPanel';
 ---
 
 <Base>
-  <Nav client:load />
+  <header>
+    <Nav client:load />
+  </header>
 
   <main id="main" tabindex="-1">
     <HeroCarousel client:load />
@@ -29,72 +31,96 @@ import TweaksPanel from '../components/TweaksPanel';
     <ClientsMarquee />
 
     <section id="contact" aria-labelledby="contact-heading">
-    <div class="wrap">
-      <div class="sec-head reveal">
-        <div class="sec-num">03 / 03</div>
-        <div>
-          <div class="sec-kicker" data-pt="Vamos conversar" data-en="Let's talk">
-            Vamos conversar
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="sec-num" aria-hidden="true">03 / 04</div>
+          <div>
+            <div class="sec-kicker" data-pt="Vamos conversar" data-en="Let's talk">
+              Vamos conversar
+            </div>
+            <h2
+              id="contact-heading"
+              class="sec-title"
+              data-pt='Peça um <em>orçamento</em> sem compromisso.'
+              data-en='Get a <em>free</em> quote.'
+            >
+              Peça um <em>orçamento</em> sem compromisso.
+            </h2>
           </div>
-          <h2
-            id="contact-heading"
-            class="sec-title"
-            data-pt='Peça um <em>orçamento</em> sem compromisso.'
-            data-en='Get a <em>free</em> quote.'
+          <p
+            class="sec-desc"
+            data-pt="Visita, avaliação e proposta em 48h. Sem letras pequenas."
+            data-en="Visit, assessment and quote within 48h."
           >
-            Peça um <em>orçamento</em> sem compromisso.
-          </h2>
+            Visita, avaliação e proposta em 48h. Sem letras pequenas.
+          </p>
         </div>
-        <p
-          class="sec-desc"
-          data-pt="Visita, avaliação e proposta em 48h. Sem letras pequenas."
-          data-en="Visit, assessment and quote within 48h."
-        >
-          Visita, avaliação e proposta em 48h. Sem letras pequenas.
-        </p>
+
+        <div class="contact-grid">
+          <Contact client:visible />
+
+          <div class="contact-info">
+            <div
+              class="big"
+              data-pt='Olá.<br/><em>Atendemos.</em>'
+              data-en='Hi.<br/><em>We answer.</em>'
+            >
+              Olá.<br /><em>Atendemos.</em>
+            </div>
+            <div class="block">
+              <div class="block-kicker">Tel.</div>
+              <a href="tel:+351289000000">+351 289 000 000</a>
+            </div>
+            <div class="block">
+              <div class="block-kicker">Email</div>
+              <a href="mailto:ola@unilimpeza.pt">ola@unilimpeza.pt</a>
+            </div>
+            <div class="block">
+              <div class="block-kicker" data-pt="Sede" data-en="HQ">Sede</div>
+              Rua do Aeroporto, 27<br />8000-000 Faro, Algarve<br />Portugal
+            </div>
+            <div class="block">
+              <div class="block-kicker" data-pt="Horário" data-en="Hours">Horário</div>
+              <span data-pt="Seg–Sáb 06:00–23:00" data-en="Mon–Sat 06:00–23:00">
+                Seg–Sáb 06:00–23:00
+              </span><br />
+              <span data-pt="Domingo sob marcação" data-en="Sundays by appointment">
+                Domingo sob marcação
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="contact-grid">
-        <Contact client:visible />
-
-        <div class="contact-info">
-          <div
-            class="big"
-            data-pt='Olá.<br/><em>Atendemos.</em>'
-            data-en='Hi.<br/><em>We answer.</em>'
+    <section id="faq" class="faq-section" aria-labelledby="faq-heading">
+      <div class="wrap">
+        <div class="sec-head reveal">
+          <div class="sec-num" aria-hidden="true">04 / 04</div>
+          <div>
+            <div class="sec-kicker" data-pt="Perguntas frequentes" data-en="Frequently asked">
+              Perguntas frequentes
+            </div>
+            <h2
+              id="faq-heading"
+              class="sec-title"
+              data-pt='Dúvidas <em>respondidas</em> antes da visita.'
+              data-en='Questions <em>answered</em> before the visit.'
+            >
+              Dúvidas <em>respondidas</em> antes da visita.
+            </h2>
+          </div>
+          <p
+            class="sec-desc"
+            data-pt="Se não encontrar a resposta, envie-nos um email. Respondemos em horas, não em dias."
+            data-en="If you don't find the answer, email us. We reply in hours, not days."
           >
-            Olá.<br /><em>Atendemos.</em>
-          </div>
-          <div class="block">
-            <div class="block-kicker">Tel.</div>
-            <a href="tel:+351289000000">+351 289 000 000</a>
-          </div>
-          <div class="block">
-            <div class="block-kicker">Email</div>
-            <a href="mailto:ola@unilimpeza.pt">ola@unilimpeza.pt</a>
-          </div>
-          <div class="block">
-            <div class="block-kicker" data-pt="Sede" data-en="HQ">Sede</div>
-            Rua do Aeroporto, 27<br />8000-000 Faro, Algarve<br />Portugal
-          </div>
-          <div class="block">
-            <div class="block-kicker" data-pt="Horário" data-en="Hours">Horário</div>
-            <span data-pt="Seg–Sáb 06:00–23:00" data-en="Mon–Sat 06:00–23:00">
-              Seg–Sáb 06:00–23:00
-            </span><br />
-            <span data-pt="Domingo sob marcação" data-en="Sundays by appointment">
-              Domingo sob marcação
-            </span>
-          </div>
+            Se não encontrar a resposta, envie-nos um email. Respondemos em horas, não em dias.
+          </p>
         </div>
-      </div>
-
-      <div style="margin-top:120px;" aria-labelledby="faq-heading">
-        <h2 id="faq-heading" class="sec-kicker reveal" style="margin-bottom:24px;">FAQ</h2>
         <FaqAccordion client:visible />
       </div>
-    </div>
-  </section>
+    </section>
   </main>
 
   <Footer />

@@ -12,10 +12,10 @@ const SlideVapor: ComponentType<Props> = ({ lang: l, TitleTag }) => {
       </div>
       <TitleTag class="s-title">
         <span class="hline">
-          <span>{pt ? 'o vapor, a pausa,' : 'the steam, the pause,'}</span>
+          <span>{pt ? 'o vapor, a pausa, ' : 'the steam, the pause, '}</span>
         </span>
         <span class="hline">
-          <span>{pt ? 'o silêncio,' : 'the silence,'}</span>
+          <span>{pt ? 'o silêncio, ' : 'the silence, '}</span>
         </span>
         <span class="hline">
           <span>{pt ? 'a cozinha pronta.' : 'the kitchen ready.'}</span>

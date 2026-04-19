@@ -62,6 +62,30 @@ export default function HeroCarousel() {
     return () => document.removeEventListener('visibilitychange', onVis);
   }, []);
 
+  // After first paint, warm up the NEXT slide's image so clip-path transitions
+  // don't stall on network. Uses requestIdleCallback to avoid blocking LCP.
+  useEffect(() => {
+    const nextIdx = (cur + 1) % HERO_SLIDES.length;
+    const slide = HERO_SLIDES[nextIdx];
+    const warm = () => {
+      const img = new Image();
+      img.decoding = 'async';
+      img.src = `${slide.photoBase}.avif`;
+    };
+    const ric =
+      (window as unknown as { requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback;
+    if (typeof ric === 'function') {
+      const id = ric(warm, { timeout: 2000 });
+      return () => {
+        const cic =
+          (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
+        if (typeof cic === 'function') cic(id);
+      };
+    }
+    const t = window.setTimeout(warm, 1200);
+    return () => window.clearTimeout(t);
+  }, [cur]);
+
   useEffect(() => {
     if (paused || reduce) return;
     const id = window.setTimeout(() => {

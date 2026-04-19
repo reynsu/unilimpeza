@@ -12,12 +12,12 @@ const SlideEditorial: ComponentType<Props> = ({ lang: l, TitleTag }) => {
       </div>
       <TitleTag class="s-title">
         <span class="hline">
-          <span>{pt ? 'Onde a' : 'Where the'}</span>
+          <span>{pt ? 'Onde a ' : 'Where the '}</span>
         </span>
         <span class="hline">
           <span>
             <strong>{pt ? 'chama' : 'flame'}</strong>
-            {pt ? ' vive,' : ' lives,'}
+            {pt ? ' vive, ' : ' lives, '}
           </span>
         </span>
         <span class="hline">

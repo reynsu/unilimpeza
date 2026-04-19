@@ -11,10 +11,10 @@ const SlideHuman: ComponentType<Props> = ({ lang: l }) => {
         <div class="s-attr fade-in">Chef Miguel · Casa do Mar, Lagos</div>
         <blockquote class="s-quote">
           <span class="hline">
-            <span>{pt ? '“Entregam-me' : '“They hand me'}</span>
+            <span>{pt ? '“Entregam-me ' : '“They hand me '}</span>
           </span>
           <span class="hline">
-            <span>{pt ? 'uma cozinha' : 'a kitchen'}</span>
+            <span>{pt ? 'uma cozinha ' : 'a kitchen '}</span>
           </span>
           <span class="hline">
             <span>

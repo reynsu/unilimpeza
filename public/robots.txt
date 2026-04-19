@@ -1,4 +1,40 @@
+# https://unilimpeza.pt/robots.txt
+
 User-agent: *
 Allow: /
+Disallow: /api/
+
+# Explicit allow for major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# Disallow high-volume AI scrapers that don't send referral traffic.
+# Remove these blocks if you want your content used for AI training.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
 
 Sitemap: https://unilimpeza.pt/sitemap-index.xml

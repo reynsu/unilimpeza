@@ -168,4 +168,4 @@ src/
 ## Credits
 
 Hero photography by contributors on [Unsplash](https://unsplash.com/).
-Typography: Fraunces, Inter Tight, JetBrains Mono, Bodoni Moda, Archivo Black, Cormorant Garamond, Instrument Serif, Space Grotesk.
+Typography: Fraunces, Inter Tight, JetBrains Mono, Archivo Black, Cormorant Garamond, Instrument Serif.
